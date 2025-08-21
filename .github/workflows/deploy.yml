@@ -48,6 +48,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            cd /home/pokdarw4/pokdarwis-landing-page
+            git pull
             # SINKRONISASI 1: Menyalin file inti Laravel dengan MENGECUALIKAN folder sistem
             rsync -avz --delete \
               --exclude 'public' \
