@@ -58,7 +58,7 @@ jobs:
               --exclude '.bash_logout' \
               --exclude '.bash_profile' \
               --exclude '.bashrc' \
-              ./ /home/pokdarw4/pokdarwis-landing-page/
+              ./ /home/pokdarw4/public_html/pokdarwis-landing-page/
             
             # SINKRONISASI 2: Menyalin HANYA ISI folder public ke public_html
             # Biasanya folder public_html tidak berisi file sistem, jadi perintah ini tetap aman
