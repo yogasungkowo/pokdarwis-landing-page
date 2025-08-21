@@ -1,4 +1,4 @@
-<x-layouts.app title="Kategori: {{ ucfirst(str_replace('-', ' ', $slug)) }} - Pokdarwis">
+<x-layouts.app :title="'Kategori: ' . $category->name . ' - Pokdarwis'">
     
     {{-- Header Section --}}
     <section class="relative py-20 bg-gradient-to-br from-sky-50 to-white overflow-hidden">
@@ -31,27 +31,17 @@
                         </svg>
                     </li>
                     <li>
-                        <span class="text-slate-700 font-medium">Kategori</span>
+                        <span class="text-slate-700 font-medium">{{ $category->name }}</span>
                     </li>
                 </ol>
             </nav>
 
             <div class="text-center">
                 <h1 class="text-4xl lg:text-5xl font-bold text-slate-800 mb-6">
-                    Kategori: {{ ucfirst(str_replace('-', ' ', $slug)) }}
+                    Kategori: {{ $category->name }}
                 </h1>
                 <p class="text-xl text-slate-600 max-w-3xl mx-auto">
-                    @if($slug === 'konservasi')
-                        Berita seputar kegiatan konservasi terumbu karang dan pelestarian ekosistem laut
-                    @elseif($slug === 'edukasi')
-                        Artikel edukatif tentang pentingnya menjaga lingkungan laut dan cara pelestariannya
-                    @elseif($slug === 'komunitas')
-                        Cerita dan update kegiatan dari komunitas Pokdarwis dan masyarakat pesisir
-                    @elseif($slug === 'penelitian')
-                        Hasil penelitian dan studi ilmiah terkait ekosistem bahari dan konservasi
-                    @else
-                        Kumpulan berita dan artikel dalam kategori {{ str_replace('-', ' ', $slug) }}
-                    @endif
+                    {{ $category->description ?: 'Kumpulan berita dan artikel dalam kategori ' . $category->name }}
                 </p>
             </div>
         </div>
@@ -72,121 +62,92 @@
                     </select>
                 </div>
                 <div class="text-slate-600">
-                    Menampilkan <span class="font-semibold">12</span> artikel
+                    Menampilkan <span class="font-semibold">{{ $articles->count() }}</span> dari {{ $articles->total() }} artikel
                 </div>
             </div>
 
-            {{-- Articles Grid --}}
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                @php
-                    $sampleArticles = [
-                        [
-                            'title' => 'Program Transplantasi Terumbu Karang Mencapai Target',
-                            'excerpt' => 'Kegiatan transplantasi terumbu karang yang dilaksanakan selama 6 bulan berhasil mencapai target 200 fragmen dengan tingkat survival rate 85%.',
-                            'image' => 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                            'date' => '15 Januari 2024',
-                            'slug' => 'program-transplantasi-terumbu-karang-mencapai-target',
-                            'tags' => ['Konservasi', 'Terumbu Karang']
-                        ],
-                        [
-                            'title' => 'Penelitian Kualitas Air Laut di Kawasan Konservasi',
-                            'excerpt' => 'Hasil monitoring kualitas air laut menunjukkan peningkatan signifikan setelah implementasi program konservasi selama 2 tahun.',
-                            'image' => 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                            'date' => '12 Januari 2024',
-                            'slug' => 'penelitian-kualitas-air-laut-kawasan-konservasi',
-                            'tags' => ['Penelitian', 'Kualitas Air']
-                        ],
-                        [
-                            'title' => 'Workshop Edukasi Lingkungan untuk Anak-anak',
-                            'excerpt' => 'Mengadakan workshop edukasi pentingnya menjaga lingkungan laut untuk siswa-siswi sekolah dasar dengan metode pembelajaran interaktif.',
-                            'image' => 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                            'date' => '10 Januari 2024',
-                            'slug' => 'workshop-edukasi-lingkungan-anak-anak',
-                            'tags' => ['Edukasi', 'Anak-anak']
-                        ],
-                        [
-                            'title' => 'Pelatihan Pemandu Wisata Bahari Berkelanjutan',
-                            'excerpt' => 'Program pelatihan untuk meningkatkan keterampilan masyarakat lokal dalam bidang pariwisata bahari yang ramah lingkungan.',
-                            'image' => 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                            'date' => '8 Januari 2024',
-                            'slug' => 'pelatihan-pemandu-wisata-bahari-berkelanjutan',
-                            'tags' => ['Komunitas', 'Pelatihan']
-                        ],
-                        [
-                            'title' => 'Inisiatif Pengurangan Sampah Plastik di Pesisir',
-                            'excerpt' => 'Kampanye bersih pantai dan edukasi pengurangan sampah plastik berhasil mengumpulkan 500kg sampah dalam sehari.',
-                            'image' => 'https://images.unsplash.com/photo-1621451537084-482c73073a0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                            'date' => '5 Januari 2024',
-                            'slug' => 'inisiatif-pengurangan-sampah-plastik-pesisir',
-                            'tags' => ['Konservasi', 'Sampah Plastik']
-                        ],
-                        [
-                            'title' => 'Seminar Nasional Konservasi Laut Indonesia',
-                            'excerpt' => 'Pokdarwis berpartisipasi dalam seminar nasional dan mempresentasikan best practice konservasi terumbu karang.',
-                            'image' => 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                            'date' => '3 Januari 2024',
-                            'slug' => 'seminar-nasional-konservasi-laut-indonesia',
-                            'tags' => ['Seminar', 'Nasional']
-                        ]
-                    ];
-                @endphp
-
-                @foreach($sampleArticles as $article)
-                    <article class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group border border-slate-100">
-                        <div class="relative overflow-hidden">
-                            <img src="{{ $article['image'] }}" 
-                                 alt="{{ $article['title'] }}" 
-                                 class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent"></div>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center gap-2 mb-3">
-                                @foreach($article['tags'] as $tag)
-                                    <a href="{{ route('tag', str_replace(' ', '-', strtolower($tag))) }}" 
-                                       class="px-3 py-1 bg-sky-100 text-sky-700 text-xs rounded-full hover:bg-sky-200 transition-colors">
-                                        {{ $tag }}
-                                    </a>
-                                @endforeach
+            @if($articles->count() > 0)
+                {{-- Articles Grid --}}
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                    @foreach($articles as $article)
+                        <article class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group border border-slate-100">
+                            <div class="relative overflow-hidden">
+                                <img src="{{ $article->image ? Storage::url($article->image) : 'https://images.unsplash.com/photo-1582740554463-dbbbbdc94043?auto=format&fit=crop&w=800&q=80' }}" 
+                                     alt="{{ $article->title }}" 
+                                     class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent"></div>
                             </div>
-                            <div class="text-sm text-slate-500 mb-2">{{ $article['date'] }}</div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3 leading-tight group-hover:text-sky-600 transition-colors">
-                                <a href="{{ route('news.detail', $article['slug']) }}">{{ $article['title'] }}</a>
-                            </h3>
-                            <p class="text-slate-600 mb-4 leading-relaxed">
-                                {{ $article['excerpt'] }}
-                            </p>
-                            <a href="{{ route('news.detail', $article['slug']) }}" 
-                               class="text-sky-600 hover:text-sky-700 font-semibold inline-flex items-center gap-2 group-hover:gap-3 transition-all">
-                                Baca Selengkapnya 
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
+                            <div class="p-6">
+                                <div class="flex items-center gap-2 mb-3">
+                                    @if($article->category)
+                                        <span class="px-3 py-1 text-xs rounded-full text-white font-medium"
+                                              style="background-color: {{ $article->category->color ?? '#3B82F6' }}">
+                                            {{ $article->category->name }}
+                                        </span>
+                                    @endif
+                                    @foreach($article->tags->take(2) as $tag)
+                                        <a href="{{ route('tag', $tag->slug) }}" 
+                                           class="px-3 py-1 text-xs rounded-full text-white hover:opacity-80 transition-opacity"
+                                           style="background-color: {{ $tag->color ?? '#10B981' }}">
+                                            {{ $tag->name }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <div class="text-sm text-slate-500 mb-2">
+                                    {{ $article->published_at ? $article->published_at->translatedFormat('d F Y') : $article->created_at->translatedFormat('d F Y') }}
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-3 leading-tight group-hover:text-sky-600 transition-colors">
+                                    <a href="{{ route('news.detail', $article->slug) }}">{{ $article->title }}</a>
+                                </h3>
+                                <p class="text-slate-600 mb-4 leading-relaxed">
+                                    {{ $article->excerpt ?: Str::limit(strip_tags($article->content), 120) }}
+                                </p>
+                                <div class="flex items-center justify-between">
+                                    <a href="{{ route('news.detail', $article->slug) }}" 
+                                       class="text-sky-600 hover:text-sky-700 font-semibold inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                                        Baca Selengkapnya 
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div class="flex items-center gap-1 text-sm text-slate-500">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        {{ number_format($article->view_count) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
 
-            {{-- Pagination --}}
-            <div class="flex justify-center">
-                <nav class="flex items-center gap-2">
-                    <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-500 hover:bg-slate-50 transition-colors" disabled>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                {{-- Pagination --}}
+                <div class="flex justify-center">
+                    {{ $articles->links() }}
+                </div>
+            @else
+                {{-- Empty State --}}
+                <div class="text-center py-16">
+                    <div class="w-32 h-32 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-16 h-16 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                         </svg>
-                    </button>
-                    <button class="px-4 py-2 bg-sky-600 text-white rounded-lg font-medium">1</button>
-                    <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors">2</button>
-                    <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors">3</button>
-                    <span class="px-2 text-slate-400">...</span>
-                    <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors">10</button>
-                    <button class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors">
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Belum Ada Artikel</h3>
+                    <p class="text-slate-600 mb-8 max-w-md mx-auto">
+                        Saat ini belum ada artikel dalam kategori "{{ $category->name }}". Silakan kembali lagi nanti atau jelajahi kategori lainnya.
+                    </p>
+                    <a href="{{ route('news') }}" 
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
-                    </button>
-                </nav>
-            </div>
+                        Kembali ke Berita
+                    </a>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -197,35 +158,44 @@
                 Kategori Lainnya
             </h2>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                @php
-                    $categories = [
-                        ['name' => 'Konservasi', 'slug' => 'konservasi', 'count' => 15, 'color' => 'green'],
-                        ['name' => 'Edukasi', 'slug' => 'edukasi', 'count' => 12, 'color' => 'blue'],
-                        ['name' => 'Komunitas', 'slug' => 'komunitas', 'count' => 8, 'color' => 'purple'],
-                        ['name' => 'Penelitian', 'slug' => 'penelitian', 'count' => 6, 'color' => 'orange']
-                    ];
-                @endphp
-                
-                @foreach($categories as $category)
-                    @if($category['slug'] !== $slug)
-                        <a href="{{ route('category', $category['slug']) }}" 
+            @php
+                $otherCategories = \App\Models\Category::where('id', '!=', $category->id)
+                    ->withCount('articles')
+                    ->orderBy('articles_count', 'desc')
+                    ->take(4)
+                    ->get();
+            @endphp
+            
+            @if($otherCategories->count() > 0)
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @foreach($otherCategories as $otherCategory)
+                        <a href="{{ route('category', $otherCategory->slug) }}" 
                            class="bg-white p-6 rounded-xl hover:shadow-lg transition-all duration-300 group border border-slate-200">
-                            <div class="w-12 h-12 bg-{{ $category['color'] }}-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-{{ $category['color'] }}-200 transition-colors">
-                                <svg class="w-6 h-6 text-{{ $category['color'] }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
+                                 style="background-color: {{ $otherCategory->color ?? '#3B82F6' }}20;">
+                                <svg class="w-6 h-6" style="color: {{ $otherCategory->color ?? '#3B82F6' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-{{ $category['color'] }}-600 transition-colors">
-                                {{ $category['name'] }}
+                            <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-sky-600 transition-colors">
+                                {{ $otherCategory->name }}
                             </h3>
-                            <p class="text-slate-600 text-sm">
-                                {{ $category['count'] }} artikel
+                            <p class="text-slate-600 text-sm mb-2">
+                                {{ $otherCategory->articles_count }} artikel
                             </p>
+                            @if($otherCategory->description)
+                                <p class="text-slate-500 text-xs">
+                                    {{ Str::limit($otherCategory->description, 50) }}
+                                </p>
+                            @endif
                         </a>
-                    @endif
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center py-8">
+                    <p class="text-slate-600">Tidak ada kategori lain yang tersedia.</p>
+                </div>
+            @endif
         </div>
     </section>
 
