@@ -46,12 +46,22 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }} # Menggunakan port kustom Anda
+          port: ${{ secrets.SSH_PORT }}
           script: |
-            # SINKRONISASI 1: Menyalin file inti Laravel (tanpa folder public)
-            rsync -avz --delete --exclude 'public' --exclude '.git' ./ /home/pokdarw4/pokdarwis-landing-page/
+            # SINKRONISASI 1: Menyalin file inti Laravel dengan MENGECUALIKAN folder sistem
+            rsync -avz --delete \
+              --exclude 'public' \
+              --exclude '.git' \
+              --exclude '.cpanel' \
+              --exclude '.cagefs' \
+              --exclude '.bash_history' \
+              --exclude '.bash_logout' \
+              --exclude '.bash_profile' \
+              --exclude '.bashrc' \
+              ./ /home/pokdarw4/pokdarwis-landing-page/
             
             # SINKRONISASI 2: Menyalin HANYA ISI folder public ke public_html
+            # Biasanya folder public_html tidak berisi file sistem, jadi perintah ini tetap aman
             rsync -avz --delete ./public/ /home/pokdarw4/public_html/
             
             # Pindah ke direktori inti aplikasi di server untuk menjalankan perintah
@@ -60,6 +70,11 @@ jobs:
             # Menjalankan perintah akhir di server
             echo "Running post-deploy commands..."
             php artisan down
+            php artisan migrate --force
+            php artisan optimize:clear
+            php artisan optimize
+            php artisan up
+            echo "Deployment finished successfully!"
             php artisan migrate --force
             php artisan optimize:clear
             php artisan optimize
