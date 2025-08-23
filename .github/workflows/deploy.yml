@@ -35,12 +35,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/pokdarw4/public_html/pokdarwis-landing-page
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
             composer install --no-interaction --prefer-dist --optimize-autoloader
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
+
 
       # Copy build hasil npm run build ke folder public_html
       - name: Sync build to public_html
