@@ -2,26 +2,36 @@
 
 namespace App\Filament\Resources;
 
+use App\Models\Tag;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Article;
+use App\Models\Category;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\ArticleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ArticleResource\RelationManagers;
-use Filament\Actions\ViewAction;
-use Filament\Forms\Components\RichEditor;
-use Illuminate\Support\Facades\Auth;
+use Dom\Text;
+use Filament\Forms\Components\ColorPicker;
 
 class ArticleResource extends Resource
 {
@@ -55,7 +65,7 @@ class ArticleResource extends Resource
                         TextInput::make('slug')
                             ->required()
                             ->maxLength(255)
-                            ->unique(Article::class, 'slug', fn ($record) => $record)
+                            ->unique(Article::class, 'slug', fn($record) => $record)
                             ->disabled()
                             ->dehydrated(),
                         Textarea::make('excerpt')
@@ -66,7 +76,7 @@ class ArticleResource extends Resource
                                     // Auto-generate meta description from excerpt
                                     $metaDesc = \Illuminate\Support\Str::limit($state, 155);
                                     $set('meta_description', $metaDesc);
-                                    
+
                                     // Auto-generate keywords from title and excerpt
                                     $title = $get('title') ?? '';
                                     $keywords = collect(explode(' ', strtolower($title . ' ' . $state)))
@@ -88,20 +98,29 @@ class ArticleResource extends Resource
                         RichEditor::make('content')
                             ->required()
                             ->toolbarButtons([
-                                'bold', 'italic', 'underline', 'link', 'bulletList', 'numberedList', 'blockquote', 'codeBlock',
-                                'insertTable', 'undo', 'redo',
+                                'bold',
+                                'italic',
+                                'underline',
+                                'link',
+                                'bulletList',
+                                'numberedList',
+                                'blockquote',
+                                'codeBlock',
+                                'insertTable',
+                                'undo',
+                                'redo',
                             ])
                             ->maxLength(5000)
                             ->columnSpanFull(),
                     ])->columns(2),
-                
+
                 Section::make('Article Settings')
                     ->schema([
                         Select::make('user_id')
                             ->relationship('user', 'name')
-                            ->default(fn () => Auth::id())
+                            ->default(fn() => Auth::id())
                             ->required()
-                            ->disabled(fn (string $operation): bool => $operation === 'create')
+                            ->disabled(fn(string $operation): bool => $operation === 'create')
                             ->dehydrated(),
                         Select::make('category_id')
                             ->relationship('category', 'name')
@@ -113,13 +132,20 @@ class ArticleResource extends Resource
                                     ->required()
                                     ->maxLength(255)
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $set('slug', \Illuminate\Support\Str::slug($state))),
+                                    ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $set('slug', \Illuminate\Support\Str::slug($state))),
                                 TextInput::make('slug')
                                     ->required()
                                     ->maxLength(255)
                                     ->unique('categories', 'slug')
                                     ->disabled()
                                     ->dehydrated(),
+                                TextInput::make('description')
+                                    ->maxLength(500)
+                                    ->columnSpanFull(),
+                                ColorPicker::make('color')
+                                    ->label('Color')
+                                    ->default('#000000')
+                                    ->columnSpanFull(),
                             ])
                             ->createOptionUsing(function (array $data): int {
                                 return \App\Models\Category::create($data)->getKey();
@@ -134,13 +160,21 @@ class ArticleResource extends Resource
                                     ->required()
                                     ->maxLength(255)
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $set('slug', \Illuminate\Support\Str::slug($state))),
+                                    ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $set('slug', \Illuminate\Support\Str::slug($state))),
                                 TextInput::make('slug')
                                     ->required()
                                     ->maxLength(255)
                                     ->unique('tags', 'slug')
                                     ->disabled()
                                     ->dehydrated(),
+                                TextInput::make('description')
+                                    ->required()
+                                    ->maxLength(500)
+                                    ->columnSpanFull(),
+                                ColorPicker::make('color')
+                                    ->label('Color')
+                                    ->default('#000000')
+                                    ->columnSpanFull(),
                             ])
                             ->createOptionUsing(function (array $data): int {
                                 return \App\Models\Tag::create($data)->getKey();
@@ -151,7 +185,7 @@ class ArticleResource extends Resource
                         DateTimePicker::make('published_at')
                             ->label('Publish At')
                             ->default(now())
-                            ->required(fn ($get) => $get('is_published')),
+                            ->required(fn($get) => $get('is_published')),
                         Toggle::make('is_featured')
                             ->label('Featured')
                             ->default(false),
@@ -200,56 +234,56 @@ class ArticleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image')
+                ImageColumn::make('image')
                     ->label('Image')
                     ->circular()
                     ->size(50),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->label('Title')
                     ->searchable()
                     ->sortable()
                     ->limit(50),
-                Tables\Columns\TextColumn::make('category.name')
+                TextColumn::make('category.name')
                     ->label('Category')
                     ->badge()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->label('Author')
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_published')
+                IconColumn::make('is_published')
                     ->label('Published')
                     ->boolean()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_featured')
+                IconColumn::make('is_featured')
                     ->label('Featured')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('view_count')
+                TextColumn::make('view_count')
                     ->label('Views')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('published_at')
+                TextColumn::make('published_at')
                     ->label('Published At')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('category')
+                SelectFilter::make('category')
                     ->relationship('category', 'name'),
-                Tables\Filters\SelectFilter::make('user')
+                SelectFilter::make('user')
                     ->relationship('user', 'name'),
-                Tables\Filters\SelectFilter::make('tags')
+                SelectFilter::make('tags')
                     ->relationship('tags', 'name')
                     ->multiple()
                     ->searchable(),
-                Tables\Filters\Filter::make('is_published')
-                    ->query(fn (Builder $query): Builder => $query->where('is_published', true)),
-                Tables\Filters\Filter::make('is_featured')
-                    ->query(fn (Builder $query): Builder => $query->where('is_featured', true)),
+                Filter::make('is_published')
+                    ->query(fn(Builder $query): Builder => $query->where('is_published', true)),
+                Filter::make('is_featured')
+                    ->query(fn(Builder $query): Builder => $query->where('is_featured', true)),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

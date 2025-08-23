@@ -28,6 +28,8 @@ class AdminLoginPanelProvider extends PanelProvider
             ->id('admin-login')
             ->path('admin-login')
             ->login()
+            ->brandLogo(fn () => view('filament.custom-brand'))
+            ->favicon(asset('images/logo.svg'))
             ->colors([
                 'primary' => Color::Sky,
             ])
