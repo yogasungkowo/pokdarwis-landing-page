@@ -16,6 +16,31 @@
     @endif
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <!-- Dark Mode Script (inline to prevent flash) -->
+    <script>
+        (function() {
+            // Check user preference first, then system preference
+            const savedTheme = localStorage.getItem('darkMode');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply dark mode if:
+            // 1. User explicitly chose dark mode, OR
+            // 2. No user preference set AND system prefers dark
+            if (savedTheme === 'true' || (savedTheme === null && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            
+            // Debug untuk memastikan dark mode terdeteksi
+            console.log('Dark mode status:', {
+                savedTheme,
+                prefersDark,
+                isDarkActive: document.documentElement.classList.contains('dark')
+            });
+        })();
+    </script>
 </head>
 <body class="antialiased bg-sky-50 text-slate-700 font-sans selection:bg-sky-200/60 dark:bg-slate-900 dark:text-slate-200">
     <x-partials.navbar />

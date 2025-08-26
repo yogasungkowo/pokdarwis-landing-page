@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tags', function (Blueprint $table) {
-            $table->text('description')->nullable()->after('slug');
-            $table->string('color')->default('#10B981')->after('description');
+        Schema::table('programs', function (Blueprint $table) {
+            $table->dropColumn('slug');
         });
     }
 
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tags', function (Blueprint $table) {
-            $table->dropColumn(['description', 'color']);
+        Schema::table('programs', function (Blueprint $table) {
+            $table->string('slug')->unique()->after('title');
         });
     }
 };

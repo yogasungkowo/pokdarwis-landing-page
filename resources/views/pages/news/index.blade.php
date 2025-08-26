@@ -10,9 +10,7 @@
                 ->paginate(6);
             
             // Get all categories with article counts
-            $categories = \App\Models\Category::withCount(['articles' => function($query) {
-                $query->where('is_published', true);
-            }])->where('is_active', true)->get();
+            $categories = \App\Models\Category::withArticleCount()->get();
             
             // Get popular tags (tags with most articles)
             $popularTags = \App\Models\Tag::withCount('articles')
@@ -87,8 +85,20 @@
                 
                 <!-- Pagination -->
                 @if($articles->hasPages())
-                    <div class="flex justify-center pt-8">
-                        {{ $articles->links() }}
+                    <div class="pt-12 space-y-6">
+                        <!-- Pagination Info -->
+                        <div class="text-center">
+                            <p class="text-sm text-slate-600 dark:text-slate-400">
+                                Menampilkan <span class="font-semibold text-slate-900 dark:text-white">{{ $articles->firstItem() }}</span> sampai 
+                                <span class="font-semibold text-slate-900 dark:text-white">{{ $articles->lastItem() }}</span> dari 
+                                <span class="font-semibold text-slate-900 dark:text-white">{{ $articles->total() }}</span> artikel
+                            </p>
+                        </div>
+                        
+                        <!-- Pagination Links -->
+                        <div class="flex justify-center">
+                            {{ $articles->links('components.simple-pagination') }}
+                        </div>
                     </div>
                 @endif
             </div>
