@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('programs', function (Blueprint $table) {
-            $table->dropColumn('slug');
+            $table->text('custom_svg')->nullable()->after('icon');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('programs', function (Blueprint $table) {
-            $table->string('slug')->unique()->after('title');
+            $table->dropColumn('custom_svg');
         });
     }
 };

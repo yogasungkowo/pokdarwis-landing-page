@@ -6,6 +6,7 @@ use App\Filament\Resources\ProgramResource\Pages;
 use App\Filament\Resources\ProgramResource\RelationManagers;
 use App\Models\Program;
 use Filament\Forms;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -67,11 +68,38 @@ class ProgramResource extends Resource
                     ->image()
                     ->directory('programs'),
 
-                TextInput::make('icon')
+                Select::make('icon')
                     ->label('Icon')
-                    ->helperText('Nama icon heroicon (contoh: heroicon-o-camera)'),
+                    ->options([
+                        'heroicon-o-camera' => '📷 Kamera (Camera)',
+                        'heroicon-o-map' => '🗺️ Peta (Map)', 
+                        'heroicon-o-sun' => '☀️ Matahari (Sun)',
+                        'heroicon-o-heart' => '❤️ Hati (Heart)',
+                        'heroicon-o-star' => '⭐ Bintang (Star)',
+                        'heroicon-o-fire' => '🔥 Api (Fire)',
+                        'heroicon-o-globe-alt' => '🌍 Dunia (Globe)',
+                        'heroicon-o-mountain' => '🏔️ Gunung (Mountain)',
+                        'heroicon-o-water' => '💧 Air (Water)',
+                        'heroicon-o-tree-pine' => '🌲 Pohon (Tree)',
+                        'heroicon-o-building-office' => '🏢 Gedung (Building)',
+                        'heroicon-o-academic-cap' => '🎓 Topi Wisuda (Academic)',
+                        'heroicon-o-user-group' => '👥 Grup (Group)',
+                        'heroicon-o-cake' => '🍰 Kue (Cake)',
+                        'heroicon-o-scissors' => '✂️ Gunting (Scissors)',
+                        'heroicon-o-paint-brush' => '🎨 Kuas (Paint Brush)',
+                        'heroicon-o-sparkles' => '✨ Kilauan (Sparkles)',
+                        'heroicon-o-gift' => '🎁 Hadiah (Gift)',
+                    ])
+                    ->searchable()
+                    ->helperText('Pilih icon yang sesuai dengan program'),
 
-                TextInput::make('color')
+                Textarea::make('custom_svg')
+                    ->label('Custom SVG Icon (Opsional)')
+                    ->rows(3)
+                    ->helperText('Jika diisi, akan menggantikan icon heroicon di atas. Masukkan kode SVG lengkap.')
+                    ->columnSpanFull(),
+
+                ColorPicker::make('color')
                     ->label('Warna')
                     ->default('#3B82F6')
                     ->helperText('Kode warna hex (contoh: #3B82F6)'),

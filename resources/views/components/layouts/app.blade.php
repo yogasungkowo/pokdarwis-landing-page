@@ -41,6 +41,9 @@
             });
         })();
     </script>
+
+    {{-- Heroicons --}}
+    <script type="module"> import heroicons from https://cdn.jsdelivr.net/npm/heroicons@2.2.0/+esm </script>
 </head>
 <body class="antialiased bg-sky-50 text-slate-700 font-sans selection:bg-sky-200/60 dark:bg-slate-900 dark:text-slate-200">
     <x-partials.navbar />

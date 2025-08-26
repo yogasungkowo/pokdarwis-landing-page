@@ -58,6 +58,12 @@ class Gallery extends Model
     // Accessors
     public function getImageUrlAttribute()
     {
+        // Jika image_path adalah URL (dimulai dengan http), return langsung
+        if ($this->image_path && (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://'))) {
+            return $this->image_path;
+        }
+        
+        // Jika image_path adalah path file lokal, return dengan asset storage
         return $this->image_path ? asset('storage/' . $this->image_path) : null;
     }
 
