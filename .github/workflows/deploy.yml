@@ -3,7 +3,7 @@ name: Deploy Laravel to cPanel
 on:
   push:
     branches:
-      - main   # atau branch yang kamu pakai
+      - main
 
 jobs:
   deploy:
@@ -25,7 +25,7 @@ jobs:
       - name: Build Assets
         run: npm run build
 
-      # Copy project ke server (exclude node_modules & lainnya)
+      # Copy project ke server
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
