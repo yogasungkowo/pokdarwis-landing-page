@@ -20,11 +20,6 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Hero Icon CDN -->
-        <script type="module">
-            import heroicons from https: //cdn.jsdelivr.net/npm/heroicons@2.2.0/+esm 
-        </script>
-
         <!-- Dark Mode Script (inline to prevent flash) -->
         <script>
             (function() {
