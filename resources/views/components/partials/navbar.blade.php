@@ -1,16 +1,14 @@
 <nav x-data="{ 
         open: false, 
         scrolled: false,
-        darkMode: localStorage.getItem('darkMode') === 'true' || (localStorage.getItem('darkMode') === null && window.matchMedia('(prefers-color-scheme: dark)').matches),
+        // initial placeholder; real init happens in x-init to avoid race conditions
+        darkMode: false,
         toggleDarkMode() {
             this.darkMode = !this.darkMode;
+            // store explicit string for portability
             localStorage.setItem('darkMode', this.darkMode.toString());
-            
-            console.log('Toggling dark mode:', {
-                newDarkMode: this.darkMode,
-                storedValue: localStorage.getItem('darkMode')
-            });
-            
+
+            // update both attribute and class so both CSS strategies work
             if (this.darkMode) {
                 document.documentElement.classList.add('dark');
                 document.documentElement.setAttribute('data-theme', 'dark');
@@ -22,16 +20,39 @@
     }" 
      x-init="
         window.addEventListener('scroll', () => scrolled = window.scrollY > 10);
-        
-        // Sync with current state on mount
-        const currentlyDark = document.documentElement.classList.contains('dark');
-        darkMode = currentlyDark;
-        
-        console.log('Navbar initialized with dark mode:', {
-            darkMode,
-            currentlyDark,
-            storedValue: localStorage.getItem('darkMode')
-        });
+
+        // Robust theme initialization: prefer explicit localStorage, then existing document attribute,
+        // then system preference. This avoids timing issues when inline scripts or CSP affect execution order.
+        (function(){
+            const stored = localStorage.getItem('darkMode');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const attrTheme = document.documentElement.getAttribute('data-theme');
+
+            if (stored === 'true') {
+                darkMode = true;
+            } else if (stored === 'false') {
+                darkMode = false;
+            } else if (attrTheme === 'dark') {
+                darkMode = true;
+            } else if (attrTheme === 'light') {
+                darkMode = false;
+            } else {
+                // fallback to system preference
+                darkMode = !!prefersDark;
+            }
+
+            // ensure DOM reflects chosen theme
+            if (darkMode) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.setAttribute('data-theme', 'light');
+                // only set explicit false if previously stored; keep as explicit for clarity
+                localStorage.setItem('darkMode', 'false');
+            }
+        })();
      " 
      :class="scrolled ? 'shadow-md bg-white/90 backdrop-blur dark:bg-slate-800/80' : 'bg-transparent'" 
      class="fixed top-0 inset-x-0 z-50 transition duration-300">
