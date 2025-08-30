@@ -118,7 +118,7 @@
                 @foreach ($activity as $act)
                 <div class="group">
                     <div class="relative overflow-hidden rounded-2xl mb-6">
-                        <img src="{{ asset('storage/' . $act->image) }}" alt="Pelestarian Alam" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <img src="{{ asset('storage/' . $act->featured_image) }}" alt="Pelestarian Alam" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 text-white">
                             <h3 class="text-xl font-bold">{{ $act->title }}</h3>

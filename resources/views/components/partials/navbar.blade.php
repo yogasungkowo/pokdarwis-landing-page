@@ -39,17 +39,6 @@
             
             <!-- Desktop Right Menu -->
             <div class="hidden md:flex items-center gap-3">
-                <div class="flex items-center gap-1 rounded-full bg-slate-100 dark:bg-slate-700 p-1 text-xs font-medium">
-                    @php $loc = app()->getLocale(); @endphp
-                    <a href="{{ route('lang.switch', ['locale' => 'id']) }}" 
-                       class="px-2 py-1 rounded-full transition-all duration-200 {{ $loc==='id'?'bg-white dark:bg-slate-900 shadow text-sky-600':'' }}">
-                       ID
-                    </a>
-                    <a href="{{ route('lang.switch', ['locale' => 'en']) }}" 
-                       class="px-2 py-1 rounded-full transition-all duration-200 {{ $loc==='en'?'bg-white dark:bg-slate-900 shadow text-sky-600':'' }}">
-                       EN
-                    </a>
-                </div>
                 <a href="{{ route('activities') }}#pelestarian" 
                    class="inline-flex items-center rounded-full bg-sky-600 text-white px-5 py-2 text-sm shadow hover:bg-sky-700 focus-visible:outline focus-visible:outline-sky-600 transition-colors duration-200">
                    Kegiatan Kami
@@ -135,20 +124,7 @@
                class="block py-3 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors duration-200 {{ request()->routeIs('contact') ? 'text-sky-600 font-semibold bg-sky-50 dark:bg-sky-900/30' : '' }}">
                Kontak
             </a>
-            
-            <!-- Mobile Language Switcher -->
-            <div class="flex gap-2 pt-4 border-t border-slate-200 dark:border-slate-700">
-                @php $loc = app()->getLocale(); @endphp
-                <a href="{{ route('lang.switch', ['locale' => 'id']) }}" 
-                   class="px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-200 {{ $loc==='id' ? 'bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300' : 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600' }}">
-                   ID
-                </a>
-                <a href="{{ route('lang.switch', ['locale' => 'en']) }}" 
-                   class="px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-200 {{ $loc==='en' ? 'bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300' : 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600' }}">
-                   EN
-                </a>
-            </div>
-            
+
             <!-- Mobile CTA Button -->
             <div class="pt-4">
                 <a @click="open = false"
