@@ -11,49 +11,66 @@
         <div class="mb-20">
             <h2 class="text-3xl font-bold text-center text-slate-900 dark:text-white mb-12">Program Unggulan</h2>
             <div class="grid lg:grid-cols-3 gap-8">
-                @php
-                    $programs = [
-                        [
-                            'title' => 'Transplantasi Karang',
-                            'desc' => 'Restorasi terumbu karang dengan teknik transplantasi untuk memulihkan ekosistem laut yang rusak',
-                            'icon' => 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9c0 1.657-4.03 3-9 3s-9-1.343-9-3m9 9v-9m0-9c-4.97 0-9 1.343-9 3v6c0 1.657 4.03 3-9 3m0-9c4.97 0 9 1.343 9 3v6c0 1.657-4.03 3-9 3',
-                            'color' => 'emerald',
-                            'image' => 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&w=800&q=80'
-                        ],
-                        [
-                            'title' => 'Pembersihan Pantai',
-                            'desc' => 'Aksi bersih pantai rutin melibatkan masyarakat, sekolah, dan relawan untuk menjaga kebersihan pesisir',
-                            'icon' => 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
-                            'color' => 'sky',
-                            'image' => 'https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?auto=format&fit=crop&w=800&q=80'
-                        ],
-                        [
-                            'title' => 'Edukasi Malaria',
-                            'desc' => 'Program pencegahan malaria melalui penyuluhan, pembagian kelambu, dan monitoring kesehatan',
-                            'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
-                            'color' => 'rose',
-                            'image' => 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=800&q=80'
-                        ]
-                    ];
-                @endphp
-                @foreach($programs as $program)
+                                @forelse($featuredPrograms as $program)
                     <div class="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                         <div class="aspect-video overflow-hidden">
-                            <img src="{{ $program['image'] }}" alt="{{ $program['title'] }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            @if($program->featured_image)
+                                <img src="{{ asset('storage/' . $program->featured_image) }}" alt="{{ $program->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-{{ $program->color_class }}-400 to-{{ $program->color_class }}-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                    <div class="text-white">
+                                        @if($program->icon === 'heroicon-o-sun')
+                                            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                            </svg>
+                                        @elseif($program->icon === 'heroicon-o-mountain')
+                                            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.75 8.5L12 3.75 16.25 8.5H21l-9 12-9-12h4.75z"></path>
+                                            </svg>
+                                        @elseif($program->icon === 'heroicon-o-building-office')
+                                            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 21h16.5M4.5 3h15l-.75 18h-13.5L4.5 3zM7.5 6v3M10.5 6v3M13.5 6v3M16.5 6v3"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                            </svg>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         <div class="p-6">
                             <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-{{ $program['color'] }}-100 dark:bg-{{ $program['color'] }}-900 rounded-xl flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-{{ $program['color'] }}-600 dark:text-{{ $program['color'] }}-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $program['icon'] }}"></path>
-                                    </svg>
+                                <div class="w-12 h-12 bg-{{ $program->color_class }}-100 dark:bg-{{ $program->color_class }}-900 rounded-xl flex items-center justify-center">
+                                    @if($program->icon === 'heroicon-o-sun')
+                                        <svg class="w-6 h-6 text-{{ $program->color_class }}-600 dark:text-{{ $program->color_class }}-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                        </svg>
+                                    @elseif($program->icon === 'heroicon-o-mountain')
+                                        <svg class="w-6 h-6 text-{{ $program->color_class }}-600 dark:text-{{ $program->color_class }}-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.75 8.5L12 3.75 16.25 8.5H21l-9 12-9-12h4.75z"></path>
+                                        </svg>
+                                    @elseif($program->icon === 'heroicon-o-building-office')
+                                        <svg class="w-6 h-6 text-{{ $program->color_class }}-600 dark:text-{{ $program->color_class }}-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 21h16.5M4.5 3h15l-.75 18h-13.5L4.5 3zM7.5 6v3M10.5 6v3M13.5 6v3M16.5 6v3"></path>
+                                        </svg>
+                                    @else
+                                        <svg class="w-6 h-6 text-{{ $program->color_class }}-600 dark:text-{{ $program->color_class }}-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                        </svg>
+                                    @endif
                                 </div>
-                                <h3 class="text-xl font-bold text-slate-900 dark:text-white">{{ $program['title'] }}</h3>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white">{{ $program->title }}</h3>
                             </div>
-                            <p class="text-slate-600 dark:text-slate-300 leading-relaxed">{{ $program['desc'] }}</p>
+                            <p class="text-slate-600 dark:text-slate-300 leading-relaxed">{{ $program->description }}</p>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="col-span-3 text-center py-12">
+                        <p class="text-slate-500 dark:text-slate-400">Belum ada program unggulan yang tersedia.</p>
+                    </div>
+                @endforelse
             </div>
         </div>
 
@@ -61,52 +78,134 @@
         <div class="mb-20">
             <h2 class="text-3xl font-bold text-center text-slate-900 dark:text-white mb-12">Kegiatan Rutin</h2>
             <div class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 rounded-2xl p-8 lg:p-12">
+                @if($weeklySchedules->count() > 0)
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        @php
+                            $dayNames = [
+                                1 => 'Senin', 2 => 'Selasa', 3 => 'Rabu', 
+                                4 => 'Kamis', 5 => 'Jumat', 6 => 'Sabtu', 7 => 'Minggu'
+                            ];
+                        @endphp
+                        @foreach($weeklySchedules as $dayOfWeek => $schedules)
+                            @foreach($schedules as $schedule)
+                                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $dayNames[$dayOfWeek] ?? 'Hari ke-' . $dayOfWeek }}</h3>
+                                        <span class="text-sm bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-3 py-1 rounded-full">
+                                            {{ date('H:i', strtotime($schedule->start_time)) }} - {{ date('H:i', strtotime($schedule->end_time)) }}
+                                        </span>
+                                    </div>
+                                    <h4 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">{{ $schedule->activity_name }}</h4>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400">{{ $schedule->description }}</p>
+                                    @if($schedule->location)
+                                        <p class="text-xs text-slate-500 dark:text-slate-500 mt-2">📍 {{ $schedule->location }}</p>
+                                    @endif
+                                </div>
+                            @endforeach
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-12">
+                        <p class="text-slate-500 dark:text-slate-400">Belum ada jadwal kegiatan rutin yang tersedia.</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <!-- Aktivitas Terbaru -->
+        <div class="mb-20">
+            <h2 class="text-3xl font-bold text-center text-slate-900 dark:text-white mb-12">Aktivitas Terbaru</h2>
+            @if($recentActivities->count() > 0)
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @php
-                        $kegiatan_rutin = [
-                            ['day' => 'Senin', 'activity' => 'Patroli Pantai', 'time' => '06:00 - 08:00', 'participants' => '15-20 relawan'],
-                            ['day' => 'Selasa', 'activity' => 'Edukasi Sekolah', 'time' => '09:00 - 11:00', 'participants' => '2-3 sekolah'],
-                            ['day' => 'Rabu', 'activity' => 'Pemeriksaan Karang', 'time' => '08:00 - 12:00', 'participants' => 'Tim diving'],
-                            ['day' => 'Kamis', 'activity' => 'Pelatihan Masyarakat', 'time' => '14:00 - 16:00', 'participants' => '30-50 peserta'],
-                            ['day' => 'Jumat', 'activity' => 'Koordinasi & Evaluasi', 'time' => '10:00 - 12:00', 'participants' => 'Pengurus inti'],
-                            ['day' => 'Sabtu', 'activity' => 'Aksi Bersih Besar', 'time' => '07:00 - 10:00', 'participants' => '100+ relawan'],
-                        ];
-                    @endphp
-                    @foreach($kegiatan_rutin as $kegiatan)
-                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $kegiatan['day'] }}</h3>
-                                <span class="text-sm bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-3 py-1 rounded-full">{{ $kegiatan['time'] }}</span>
+                    @foreach($recentActivities as $activity)
+                        <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                            @if($activity->featured_image)
+                                <div class="aspect-video overflow-hidden">
+                                    <img src="{{ asset('storage/' . $activity->featured_image) }}" alt="{{ $activity->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                                </div>
+                            @endif
+                            <div class="p-6">
+                                <div class="flex items-center gap-2 mb-3">
+                                    @if($activity->program)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{{ $activity->program->color_class }}-100 text-{{ $activity->program->color_class }}-800 dark:bg-{{ $activity->program->color_class }}-900 dark:text-{{ $activity->program->color_class }}-200">
+                                            {{ $activity->program->title }}
+                                        </span>
+                                    @endif
+                                    @php
+                                        $statusColors = [
+                                            'upcoming' => 'blue',
+                                            'ongoing' => 'emerald',
+                                            'completed' => 'slate',
+                                            'cancelled' => 'red'
+                                        ];
+                                        $statusLabels = [
+                                            'upcoming' => 'Akan Datang',
+                                            'ongoing' => 'Berlangsung',
+                                            'completed' => 'Selesai',
+                                            'cancelled' => 'Dibatalkan'
+                                        ];
+                                        $statusColor = $statusColors[$activity->status] ?? 'slate';
+                                        $statusLabel = $statusLabels[$activity->status] ?? $activity->status;
+                                    @endphp
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-{{ $statusColor }}-100 text-{{ $statusColor }}-800 dark:bg-{{ $statusColor }}-900 dark:text-{{ $statusColor }}-200">
+                                        {{ $statusLabel }}
+                                    </span>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ $activity->title }}</h3>
+                                <p class="text-slate-600 dark:text-slate-300 text-sm mb-4 line-clamp-3">{{ $activity->description }}</p>
+                                <div class="flex items-center text-sm text-slate-500 dark:text-slate-400">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    {{ $activity->start_datetime ? $activity->start_datetime->format('d M Y, H:i') : 'Tanggal belum ditentukan' }}
+                                </div>
+                                @if($activity->location)
+                                    <div class="flex items-center text-sm text-slate-500 dark:text-slate-400 mt-1">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        {{ $activity->location }}
+                                    </div>
+                                @endif
                             </div>
-                            <h4 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">{{ $kegiatan['activity'] }}</h4>
-                            <p class="text-sm text-slate-600 dark:text-slate-400">{{ $kegiatan['participants'] }}</p>
                         </div>
                     @endforeach
                 </div>
-            </div>
+            @else
+                <div class="text-center py-12">
+                    <p class="text-slate-500 dark:text-slate-400">Belum ada aktivitas terbaru yang tersedia.</p>
+                </div>
+            @endif
         </div>
 
         <!-- Galeri Dokumentasi -->
         <div class="mb-20">
             <h2 class="text-3xl font-bold text-center text-slate-900 dark:text-white mb-12">Galeri Dokumentasi</h2>
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                @php
-                    $gallery_images = [
-                        'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=400&q=80',
-                        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=400&q=80',
-                        'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&w=400&q=80',
-                        'https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?auto=format&fit=crop&w=400&q=80',
-                        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=400&q=80',
-                        'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80',
-                        'https://images.unsplash.com/photo-1583212292467-632de8dc9cca?auto=format&fit=crop&w=400&q=80',
-                        'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80',
-                    ];
-                @endphp
-                @foreach($gallery_images as $index => $image)
+                @forelse($galleryItems as $gallery)
                     <div class="aspect-square overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer group">
-                        <img src="{{ $image }}" alt="Dokumentasi kegiatan {{ $index + 1 }}" class="w-full h-full object-cover group-hover:brightness-110 transition-all duration-300" />
+                        <img src="{{ $gallery->image_url }}" alt="{{ $gallery->title }}" class="w-full h-full object-cover group-hover:brightness-110 transition-all duration-300" />
                     </div>
-                @endforeach
+                @empty
+                    @php
+                        $gallery_images = [
+                            'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=400&q=80',
+                            'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=400&q=80',
+                            'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&w=400&q=80',
+                            'https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?auto=format&fit=crop&w=400&q=80',
+                            'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=400&q=80',
+                            'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80',
+                            'https://images.unsplash.com/photo-1583212292467-632de8dc9cca?auto=format&fit=crop&w=400&q=80',
+                            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80',
+                        ];
+                    @endphp
+                    @foreach($gallery_images as $index => $image)
+                        <div class="aspect-square overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer group">
+                            <img src="{{ $image }}" alt="Dokumentasi kegiatan {{ $index + 1 }}" class="w-full h-full object-cover group-hover:brightness-110 transition-all duration-300" />
+                        </div>
+                    @endforeach
+                @endforelse
             </div>
         </div>
 
