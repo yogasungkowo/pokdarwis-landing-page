@@ -1,6 +1,6 @@
 @props(['title' => 'Pokdarwis'])
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth" data-theme="dark">
 
     <head>
         <meta charset="utf-8">
@@ -35,17 +35,23 @@
                 // Apply dark mode if:
                 // 1. User explicitly chose dark mode, OR
                 // 2. No user preference set AND system prefers dark
-                if (savedTheme === 'true' || (savedTheme === null && prefersDark)) {
+                const shouldBeDark = savedTheme === 'true' || (savedTheme === null && prefersDark);
+                
+                if (shouldBeDark) {
                     document.documentElement.classList.add('dark');
+                    document.documentElement.setAttribute('data-theme', 'dark');
                 } else {
                     document.documentElement.classList.remove('dark');
+                    document.documentElement.setAttribute('data-theme', 'light');
                 }
 
                 // Debug untuk memastikan dark mode terdeteksi
                 console.log('Dark mode status:', {
                     savedTheme,
                     prefersDark,
-                    isDarkActive: document.documentElement.classList.contains('dark')
+                    shouldBeDark,
+                    isDarkActive: document.documentElement.classList.contains('dark'),
+                    dataTheme: document.documentElement.getAttribute('data-theme')
                 });
             })();
         </script>
