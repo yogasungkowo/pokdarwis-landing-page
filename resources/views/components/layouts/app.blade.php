@@ -1,8 +1,28 @@
 @props(['title' => 'Pokdarwis'])
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth" data-theme="dark">
+<html lang="id" class="scroll-smooth dark">
 
     <head>
+        <script>
+            // Intercept attempts to set data-theme on elements and translate to class-based theme
+            (function () {
+                try {
+                    const orig = Element.prototype.setAttribute;
+                    Element.prototype.setAttribute = function (name, value) {
+                        if (String(name).toLowerCase() === 'data-theme') {
+                            const v = String(value || '').toLowerCase();
+                            if (v === 'dark' || v === 'true') document.documentElement.classList.add('dark');
+                            else document.documentElement.classList.remove('dark');
+                            // don't leave the attribute on the element
+                            return this;
+                        }
+                        return orig.apply(this, arguments);
+                    };
+                } catch (e) {
+                    // ignore if prototype can't be changed
+                }
+            })();
+        </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ $title }} - Komunitas Laut</title>
@@ -27,27 +47,54 @@
                 const savedTheme = localStorage.getItem('darkMode');
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-                // Apply dark mode if:
-                // 1. User explicitly chose dark mode, OR
-                // 2. No user preference set AND system prefers dark
                 const shouldBeDark = savedTheme === 'true' || (savedTheme === null && prefersDark);
                 
                 if (shouldBeDark) {
                     document.documentElement.classList.add('dark');
-                    document.documentElement.setAttribute('data-theme', 'dark');
                 } else {
                     document.documentElement.classList.remove('dark');
-                    document.documentElement.setAttribute('data-theme', 'light');
                 }
 
-                // Debug untuk memastikan dark mode terdeteksi
                 console.log('Dark mode status:', {
                     savedTheme,
                     prefersDark,
                     shouldBeDark,
-                    isDarkActive: document.documentElement.classList.contains('dark'),
-                    dataTheme: document.documentElement.getAttribute('data-theme')
+                    isDarkActive: document.documentElement.classList.contains('dark')
                 });
+            })();
+        </script>
+        <!-- Sync any data-theme attribute (from third-party scripts) into class-based theme -->
+        <script>
+            (function () {
+                function syncThemeFromAttr(val) {
+                    if (!val) return;
+                    const theme = String(val).toLowerCase();
+                    if (theme === 'dark' || theme === 'true') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    try { document.documentElement.removeAttribute('data-theme'); } catch (e) {}
+                }
+
+                // initial sync
+                const current = document.documentElement.getAttribute('data-theme');
+                if (current) syncThemeFromAttr(current);
+
+                // watch for future changes from vendor scripts and convert immediately
+                try {
+                    const mo = new MutationObserver(function (mutations) {
+                        for (const m of mutations) {
+                            if (m.type === 'attributes' && m.attributeName === 'data-theme') {
+                                const v = document.documentElement.getAttribute('data-theme');
+                                syncThemeFromAttr(v);
+                            }
+                        }
+                    });
+                    mo.observe(document.documentElement, { attributes: true });
+                } catch (e) {
+                    // ignore in old browsers
+                }
             })();
         </script>
     </head>

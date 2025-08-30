@@ -8,13 +8,11 @@
             // store explicit string for portability
             localStorage.setItem('darkMode', this.darkMode.toString());
 
-            // update both attribute and class so both CSS strategies work
+            // update class-based theme only
             if (this.darkMode) {
                 document.documentElement.classList.add('dark');
-                document.documentElement.setAttribute('data-theme', 'dark');
             } else {
                 document.documentElement.classList.remove('dark');
-                document.documentElement.setAttribute('data-theme', 'light');
             }
         }
     }" 
@@ -26,7 +24,8 @@
         (function(){
             const stored = localStorage.getItem('darkMode');
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const attrTheme = document.documentElement.getAttribute('data-theme');
+            // read current class presence instead of data-theme attribute
+            const attrTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
             if (stored === 'true') {
                 darkMode = true;
@@ -41,15 +40,13 @@
                 darkMode = !!prefersDark;
             }
 
-            // ensure DOM reflects chosen theme
+            // ensure DOM reflects chosen theme (class only)
             if (darkMode) {
                 document.documentElement.classList.add('dark');
-                document.documentElement.setAttribute('data-theme', 'dark');
                 localStorage.setItem('darkMode', 'true');
             } else {
                 document.documentElement.classList.remove('dark');
-                document.documentElement.setAttribute('data-theme', 'light');
-                // only set explicit false if previously stored; keep as explicit for clarity
+                // store explicit false for clarity
                 localStorage.setItem('darkMode', 'false');
             }
         })();
