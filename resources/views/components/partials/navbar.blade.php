@@ -4,7 +4,13 @@
         darkMode: localStorage.getItem('darkMode') === 'true' || (localStorage.getItem('darkMode') === null && window.matchMedia('(prefers-color-scheme: dark)').matches),
         toggleDarkMode() {
             this.darkMode = !this.darkMode;
-            localStorage.setItem('darkMode', this.darkMode);
+            localStorage.setItem('darkMode', this.darkMode.toString());
+            
+            console.log('Toggling dark mode:', {
+                newDarkMode: this.darkMode,
+                storedValue: localStorage.getItem('darkMode')
+            });
+            
             if (this.darkMode) {
                 document.documentElement.classList.add('dark');
                 document.documentElement.setAttribute('data-theme', 'dark');
@@ -16,14 +22,16 @@
     }" 
      x-init="
         window.addEventListener('scroll', () => scrolled = window.scrollY > 10);
-        // Set initial theme on component mount
-        if (darkMode) {
-            document.documentElement.classList.add('dark');
-            document.documentElement.setAttribute('data-theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.setAttribute('data-theme', 'light');
-        }
+        
+        // Sync with current state on mount
+        const currentlyDark = document.documentElement.classList.contains('dark');
+        darkMode = currentlyDark;
+        
+        console.log('Navbar initialized with dark mode:', {
+            darkMode,
+            currentlyDark,
+            storedValue: localStorage.getItem('darkMode')
+        });
      " 
      :class="scrolled ? 'shadow-md bg-white/90 backdrop-blur dark:bg-slate-800/80' : 'bg-transparent'" 
      class="fixed top-0 inset-x-0 z-50 transition duration-300">
