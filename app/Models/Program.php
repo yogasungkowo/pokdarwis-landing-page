@@ -14,7 +14,6 @@ class Program extends Model
         'title',
         'description',
         'icon',
-        'custom_svg',
         'color',
         'featured_image',
         'category',
@@ -81,26 +80,5 @@ class Program extends Model
         ];
 
         return $colorMap[$this->color] ?? 'blue';
-    }
-
-    public function getIconDisplayAttribute()
-    {
-        // Jika ada custom SVG, gunakan itu
-        if (!empty($this->custom_svg)) {
-            return $this->custom_svg;
-        }
-
-        // Jika tidak, gunakan heroicon
-        if (!empty($this->icon)) {
-            return $this->icon;
-        }
-
-        // Default icon
-        return 'heroicon-o-squares-plus';
-    }
-
-    public function hasCustomSvgAttribute()
-    {
-        return !empty($this->custom_svg);
     }
 }

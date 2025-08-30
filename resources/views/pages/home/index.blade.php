@@ -1,9 +1,13 @@
 <x-layouts.app title="Beranda">
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center overflow-hidden">
-        <!-- Background dengan foto Pantai Merdeka -->
+        <!-- Background dengan foto dari About atau default -->
         <div class="absolute inset-0 -z-10">
-            <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=1920&q=80" alt="Pantai Merdeka" class="w-full h-full object-cover" />
+            @if($about && $about->image)
+                <img src="{{ asset('storage/' . $about->image) }}" alt="Background POKDARWIS" class="w-full h-full object-cover" />
+            @else
+                <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=1920&q=80" alt="Pantai Merdeka" class="w-full h-full object-cover" />
+            @endif
             <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/40"></div>
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -33,9 +37,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">Tentang POKDARWIS</h2>
-                <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-                    Kelompok Sadar Wisata yang berfokus pada pelestarian lingkungan pantai dan pencegahan malaria untuk mendukung pariwisata berkelanjutan
-                </p>
+                @if($about && $about->history)
+                    <div class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto prose prose-lg dark:prose-invert">
+                        {!! Str::limit(strip_tags($about->history), 200) !!}
+                    </div>
+                @else
+                    <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+                        Kelompok Sadar Wisata yang berfokus pada pelestarian lingkungan pantai dan pencegahan malaria untuk mendukung pariwisata berkelanjutan
+                    </p>
+                @endif
             </div>
             
             <div class="grid lg:grid-cols-2 gap-16 items-center mb-20">
@@ -48,7 +58,13 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Visi Kami</h3>
-                            <p class="text-slate-600 dark:text-slate-300">Menjadi komunitas rujukan dalam konservasi pantai dan pencegahan malaria berbasis masyarakat pesisir.</p>
+                            @if($about && $about->vision)
+                                <div class="text-slate-600 dark:text-slate-300 prose prose-slate dark:prose-invert max-w-none [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:mb-1">
+                                    {!! $about->vision !!}
+                                </div>
+                            @else
+                                <p class="text-slate-600 dark:text-slate-300">Menjadi komunitas rujukan dalam konservasi pantai dan pencegahan malaria berbasis masyarakat pesisir.</p>
+                            @endif
                         </div>
                     </div>
                     
@@ -60,7 +76,13 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Misi Kami</h3>
-                            <p class="text-slate-600 dark:text-slate-300">Pemberdayaan masyarakat pesisir melalui edukasi lingkungan, pencegahan malaria, dan pengembangan ekowisata.</p>
+                            @if($about && $about->mission)
+                                <div class="text-slate-600 dark:text-slate-300 prose prose-slate dark:prose-invert max-w-none [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:mb-1">
+                                    {!! $about->mission !!}
+                                </div>
+                            @else
+                                <p class="text-slate-600 dark:text-slate-300">Pemberdayaan masyarakat pesisir melalui edukasi lingkungan, pencegahan malaria, dan pengembangan ekowisata.</p>
+                            @endif
                         </div>
                     </div>
                     
@@ -75,7 +97,11 @@
                 </div>
                 
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" alt="Komunitas POKDARWIS" class="rounded-2xl shadow-2xl" />
+                    @if($about && $about->image)
+                        <img src="{{ asset('storage/' . $about->image) }}" alt="Komunitas POKDARWIS" class="rounded-2xl shadow-2xl" />
+                    @else
+                        <img src="{{ asset('images/pokdarwis.webp') }}" alt="Komunitas POKDARWIS" class="rounded-2xl shadow-2xl" />
+                    @endif
                     <div class="absolute inset-0 rounded-2xl ring-1 ring-black/10"></div>
                 </div>
             </div>
@@ -89,118 +115,43 @@
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
-                @forelse($featuredPrograms as $program)
-                    <div class="group">
-                        <div class="relative overflow-hidden rounded-2xl mb-6">
-                            <img src="{{ $program->image_url ?: 'https://images.unsplash.com/photo-1582740554463-dbbbbdc94043?auto=format&fit=crop&w=600&q=80' }}" 
-                                 alt="{{ $program->name }}" 
-                                 class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-xl font-bold">{{ $program->name }}</h3>
-                                <p class="text-sm opacity-90">{{ Str::limit($program->description, 50) }}</p>
-                            </div>
+                <div class="group">
+                    <div class="relative overflow-hidden rounded-2xl mb-6">
+                        <img src="https://images.unsplash.com/photo-1582740554463-dbbbbdc94043?auto=format&fit=crop&w=600&q=80" alt="Pelestarian Alam" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <h3 class="text-xl font-bold">Pelestarian Alam</h3>
+                            <p class="text-sm opacity-90">Konservasi terumbu karang & ekosistem pantai</p>
                         </div>
                     </div>
-                @empty
-                    <!-- Fallback ke data statis jika tidak ada program -->
-                    <div class="group">
-                        <div class="relative overflow-hidden rounded-2xl mb-6">
-                            <img src="https://images.unsplash.com/photo-1582740554463-dbbbbdc94043?auto=format&fit=crop&w=600&q=80" alt="Pelestarian Alam" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-xl font-bold">Pelestarian Alam</h3>
-                                <p class="text-sm opacity-90">Konservasi terumbu karang & ekosistem pantai</p>
-                            </div>
+                </div>
+                
+                <div class="group">
+                    <div class="relative overflow-hidden rounded-2xl mb-6">
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=600&q=80" alt="Edukasi Malaria" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <h3 class="text-xl font-bold">Edukasi Malaria</h3>
+                            <p class="text-sm opacity-90">Pencegahan & penanganan malaria</p>
                         </div>
                     </div>
-                    
-                    <div class="group">
-                        <div class="relative overflow-hidden rounded-2xl mb-6">
-                            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=600&q=80" alt="Edukasi Malaria" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-xl font-bold">Edukasi Malaria</h3>
-                                <p class="text-sm opacity-90">Pencegahan & penanganan malaria</p>
-                            </div>
+                </div>
+                
+                <div class="group">
+                    <div class="relative overflow-hidden rounded-2xl mb-6">
+                        <img src="https://images.unsplash.com/photo-1504600770771-fb03a6961d49?auto=format&fit=crop&w=600&q=80" alt="Festival Lokal" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 text-white">
+                            <h3 class="text-xl font-bold">Festival Lokal</h3>
+                            <p class="text-sm opacity-90">Event budaya & promosi wisata</p>
                         </div>
                     </div>
-                    
-                    <div class="group">
-                        <div class="relative overflow-hidden rounded-2xl mb-6">
-                            <img src="https://images.unsplash.com/photo-1504600770771-fb03a6961d49?auto=format&fit=crop&w=600&q=80" alt="Festival Lokal" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white">
-                                <h3 class="text-xl font-bold">Festival Lokal</h3>
-                                <p class="text-sm opacity-90">Event budaya & promosi wisata</p>
-                            </div>
-                        </div>
-                    </div>
-                @endforelse
+                </div>
             </div>
             
             <div class="text-center mt-12">
                 <a href="{{ route('activities') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold shadow-lg transform hover:scale-105 transition-all duration-200">
                     Lihat Semua Kegiatan
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Aktivitas Terbaru -->
-    <section class="py-20 bg-slate-50 dark:bg-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">Aktivitas Terbaru</h2>
-                <p class="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-                    Ikuti perkembangan kegiatan dan program terbaru dari POKDARWIS
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                @forelse($recentActivities as $activity)
-                    <article class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="aspect-video overflow-hidden">
-                            <img src="{{ $activity->image_url ?: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=600&q=80' }}" 
-                                 alt="{{ $activity->title }}" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
-                                    {{ $activity->program->name ?? 'Program' }}
-                                </span>
-                                <span class="text-slate-500 text-sm">
-                                    {{ $activity->start_datetime ? $activity->start_datetime->format('d M Y') : '' }}
-                                </span>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 transition-colors">
-                                {{ $activity->title }}
-                            </h3>
-                            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                                {{ Str::limit($activity->description, 120) }}
-                            </p>
-                        </div>
-                    </article>
-                @empty
-                    <div class="col-span-full text-center py-12">
-                        <div class="text-slate-400 mb-4">
-                            <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-slate-600 dark:text-slate-400 mb-2">Belum ada aktivitas</h3>
-                        <p class="text-slate-500 dark:text-slate-500">Aktivitas terbaru akan ditampilkan di sini</p>
-                    </div>
-                @endforelse
-            </div>
-            
-            <div class="text-center mt-12">
-                <a href="{{ route('activities') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold shadow-lg transform hover:scale-105 transition-all duration-200">
-                    Lihat Semua Aktivitas
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                     </svg>

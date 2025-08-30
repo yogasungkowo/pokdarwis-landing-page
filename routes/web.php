@@ -2,18 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\HomeController;
 
 // Set locale di setiap route (hindari closure sebagai middleware dalam atribut route)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/tentang', function () {
-    app()->setLocale(session('locale','id'));
-    return view('pages.about.index');
-})->name('about');
+Route::get('/tentang', [AboutController::class, 'index'])->name('about');
 
-Route::get('/kegiatan', [ActivityController::class, 'index'])->name('activities');
+Route::get('/kegiatan', function () {
+    app()->setLocale(session('locale','id'));
+    return view('pages.activities.index');
+})->name('activities');
 
 Route::get('/edukasi-malaria', function () {
     app()->setLocale(session('locale','id'));
