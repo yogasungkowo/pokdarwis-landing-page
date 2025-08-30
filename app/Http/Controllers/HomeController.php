@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\About;
+use App\Models\Activity;
 
 class HomeController extends Controller
 {
@@ -13,6 +14,8 @@ class HomeController extends Controller
         
         // Get About data
         $about = About::first();
+
+        $activity = Activity::latest()->take(3)->get();
         
         // Create default data if not exists
         if (!$about) {
@@ -24,7 +27,7 @@ class HomeController extends Controller
                 'location' => 'Lokasi belum diisi.',
             ]);
         }
-        
-        return view('pages.home.index', compact('about'));
+
+        return view('pages.home.index', compact('about', 'activity'));
     }
 }

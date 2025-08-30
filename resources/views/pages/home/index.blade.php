@@ -115,38 +115,18 @@
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
+                @foreach ($activity as $act)
                 <div class="group">
                     <div class="relative overflow-hidden rounded-2xl mb-6">
-                        <img src="https://images.unsplash.com/photo-1582740554463-dbbbbdc94043?auto=format&fit=crop&w=600&q=80" alt="Pelestarian Alam" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <img src="{{ asset('storage/' . $act->image) }}" alt="Pelestarian Alam" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 text-white">
-                            <h3 class="text-xl font-bold">Pelestarian Alam</h3>
-                            <p class="text-sm opacity-90">Konservasi terumbu karang & ekosistem pantai</p>
+                            <h3 class="text-xl font-bold">{{ $act->title }}</h3>
+                            <p class="text-sm opacity-90">{{ $act->description }}</p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="group">
-                    <div class="relative overflow-hidden rounded-2xl mb-6">
-                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=600&q=80" alt="Edukasi Malaria" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-4 left-4 text-white">
-                            <h3 class="text-xl font-bold">Edukasi Malaria</h3>
-                            <p class="text-sm opacity-90">Pencegahan & penanganan malaria</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="group">
-                    <div class="relative overflow-hidden rounded-2xl mb-6">
-                        <img src="https://images.unsplash.com/photo-1504600770771-fb03a6961d49?auto=format&fit=crop&w=600&q=80" alt="Festival Lokal" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-4 left-4 text-white">
-                            <h3 class="text-xl font-bold">Festival Lokal</h3>
-                            <p class="text-sm opacity-90">Event budaya & promosi wisata</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
             
             <div class="text-center mt-12">
