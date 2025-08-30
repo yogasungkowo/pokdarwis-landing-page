@@ -82,7 +82,7 @@
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         @php
                             $dayNames = [
-                                1 => 'Senin', 2 => 'Selasa', 3 => 'Rabu', 
+                                0 => 'Minggu', 1 => 'Senin', 2 => 'Selasa', 3 => 'Rabu', 
                                 4 => 'Kamis', 5 => 'Jumat', 6 => 'Sabtu', 7 => 'Minggu'
                             ];
                         @endphp
@@ -90,7 +90,9 @@
                             @foreach($schedules as $schedule)
                                 <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
                                     <div class="flex items-center justify-between mb-4">
-                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $dayNames[$dayOfWeek] ?? 'Hari ke-' . $dayOfWeek }}</h3>
+                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+                                            {{ $dayNames[$dayOfWeek] ?? ($dayOfWeek ? 'Hari ke-' . $dayOfWeek : 'Hari Tidak Diketahui') }}
+                                        </h3>
                                         <span class="text-sm bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-3 py-1 rounded-full">
                                             {{ date('H:i', strtotime($schedule->start_time)) }} - {{ date('H:i', strtotime($schedule->end_time)) }}
                                         </span>
