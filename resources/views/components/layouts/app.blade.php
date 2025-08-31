@@ -63,6 +63,22 @@
                 });
             })();
         </script>
+        <!-- Ensure localStorage darkMode exists (so production has persisted preference even before Alpine runs) -->
+        <script>
+            (function () {
+                try {
+                    if (localStorage.getItem('darkMode') === null) {
+                        const hasClass = document.documentElement.classList.contains('dark');
+                        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        const shouldDark = hasClass || prefersDark;
+                        localStorage.setItem('darkMode', shouldDark ? 'true' : 'false');
+                    }
+                } catch (e) {
+                    // ignore
+                }
+            })();
+        </script>
+
         <!-- Sync any data-theme attribute (from third-party scripts) into class-based theme -->
         <script>
             (function () {
