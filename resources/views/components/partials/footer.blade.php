@@ -48,12 +48,12 @@
             <div>
                 <h4 class="font-semibold text-lg mb-4">Navigasi</h4>
                 <ul class="space-y-2">
-                    <li><a href="{{ route('home') }}" class="text-slate-300 hover:text-green-400 transition-colors">Beranda</a></li>
-                    <li><a href="{{ route('about') }}" class="text-slate-300 hover:text-green-400 transition-colors">Tentang</a></li>
-                    <li><a href="{{ route('activities') }}" class="text-slate-300 hover:text-green-400 transition-colors">Kegiatan</a></li>
-                    <li><a href="{{ route('news') }}" class="text-slate-300 hover:text-green-400 transition-colors">Berita</a></li>
-                    <li><a href="#galeri" class="text-slate-300 hover:text-green-400 transition-colors">Galeri</a></li>
-                    <li><a href="{{ route('contact') }}" class="text-slate-300 hover:text-green-400 transition-colors">Kontak</a></li>
+                    <li><a href="{{ route('home') }}" class="text-slate-300 hover:text-sky-400 transition-colors">Beranda</a></li>
+                    <li><a href="{{ route('about') }}" class="text-slate-300 hover:text-sky-400 transition-colors">Tentang</a></li>
+                    <li><a href="{{ route('activities') }}" class="text-slate-300 hover:text-sky-400 transition-colors">Kegiatan</a></li>
+                    <li><a href="{{ route('news') }}" class="text-slate-300 hover:text-sky-400 transition-colors">Berita</a></li>
+                    <li><a href="#galeri" class="text-slate-300 hover:text-sky-400 transition-colors">Galeri</a></li>
+                    <li><a href="{{ route('contact') }}" class="text-slate-300 hover:text-sky-400 transition-colors">Kontak</a></li>
                 </ul>
             </div>
 
@@ -71,7 +71,7 @@
                     <div class="space-y-3">
                         @foreach($latestNews as $news)
                             <a href="{{ route('news.detail', $news->slug) }}" class="block group">
-                                <h5 class="text-slate-300 group-hover:text-green-400 transition-colors text-sm leading-relaxed">
+                                <h5 class="text-slate-300 group-hover:text-sky-400 transition-colors text-sm leading-relaxed">
                                     {{ Str::limit($news->title, 60) }}
                                 </h5>
                                 <p class="text-slate-500 text-xs mt-1">
@@ -84,7 +84,7 @@
                     <p class="text-slate-400 text-sm">Belum ada berita tersedia.</p>
                 @endif
                 
-                <a href="{{ route('news') }}" class="inline-block mt-4 text-green-400 hover:text-green-300 text-sm font-medium transition-colors">
+                <a href="{{ route('news') }}" class="inline-block mt-4 text-sky-400 hover:text-green-300 text-sm font-medium transition-colors">
                     Lihat Semua Berita →
                 </a>
             </div>
@@ -95,11 +95,11 @@
                 <div class="space-y-3">
                     <div>
                         <p class="text-slate-400 text-sm">Email</p>
-                        <a href="mailto:info@pokdarwis.test" class="text-slate-300 hover:text-green-400 transition-colors">info@pokdarwis.test</a>
+                        <a href="mailto:info@pokdarwis.test" class="text-slate-300 hover:text-sky-400 transition-colors">info@pokdarwis.test</a>
                     </div>
                     <div>
                         <p class="text-slate-400 text-sm">Telepon</p>
-                        <a href="tel:+6281234567890" class="text-slate-300 hover:text-green-400 transition-colors">+62 812-3456-7890</a>
+                        <a href="tel:+6281234567890" class="text-slate-300 hover:text-sky-400 transition-colors">+62 812-3456-7890</a>
                     </div>
                     <div>
                         <p class="text-slate-400 text-sm">Alamat</p>

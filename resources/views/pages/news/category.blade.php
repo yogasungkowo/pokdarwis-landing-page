@@ -1,17 +1,23 @@
 <x-layouts.app :title="'Kategori: ' . $category->name . ' - Pokdarwis'">
     
     {{-- Header Section --}}
-    <section class="relative py-20 bg-gradient-to-br from-sky-50 to-white dark:from-slate-900 dark:to-slate-800 overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-transparent dark:from-sky-400/10"></div>
-        <div class="absolute top-10 right-10 w-64 h-64 bg-sky-100 dark:bg-sky-900/30 rounded-full blur-3xl opacity-30"></div>
-        <div class="absolute bottom-10 left-10 w-80 h-80 bg-sky-200 dark:bg-sky-800/30 rounded-full blur-3xl opacity-20"></div>
+    <section class="relative py-20 overflow-hidden"
+             style="background: linear-gradient(135deg, {{ $category->color ?? '#0EA5E9' }}08, transparent, {{ $category->color ?? '#0EA5E9' }}05);">
+        <div class="absolute inset-0 bg-gradient-to-br from-white/80 to-white/60 dark:from-slate-900/80 dark:to-slate-800/60"></div>
+        <div class="absolute top-10 right-10 w-64 h-64 rounded-full blur-3xl opacity-30"
+             style="background: {{ $category->color ?? '#0EA5E9' }}20;"></div>
+        <div class="absolute bottom-10 left-10 w-80 h-80 rounded-full blur-3xl opacity-20"
+             style="background: {{ $category->color ?? '#0EA5E9' }}15;"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             {{-- Breadcrumb --}}
             <nav class="mb-8" aria-label="Breadcrumb">
                 <ol class="flex items-center space-x-2 text-sm">
                     <li>
-                        <a href="{{ route('home') }}" class="text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                        <a href="{{ route('home') }}" class="text-slate-500 dark:text-slate-400 transition-colors duration-200"
+                           style="color: {{ $category->color ?? '#0EA5E9' }};"
+                           onmouseover="this.style.opacity='0.8'"
+                           onmouseout="this.style.opacity='1'">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                             </svg>
@@ -23,7 +29,10 @@
                         </svg>
                     </li>
                     <li>
-                        <a href="{{ route('news') }}" class="text-slate-500 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-400 transition-colors">Berita</a>
+                        <a href="{{ route('news') }}" class="text-slate-500 dark:text-slate-400 transition-colors duration-200"
+                           style="color: {{ $category->color ?? '#0EA5E9' }};"
+                           onmouseover="this.style.opacity='0.8'"
+                           onmouseout="this.style.opacity='1'">Berita</a>
                     </li>
                     <li>
                         <svg class="w-4 h-4 text-slate-400 dark:text-slate-500" fill="currentColor" viewBox="0 0 20 20">
@@ -38,12 +47,11 @@
 
             <div class="text-center">
                 <!-- Category Badge dengan styling yang bekerja untuk dark mode -->
-                <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full font-medium mb-6 transition-all duration-300
-                           bg-gradient-to-br from-sky-100 to-sky-200 dark:from-sky-800/30 dark:to-sky-700/30
-                           border-2 border-sky-300 dark:border-sky-600
-                           text-sky-700 dark:text-sky-300
-                           shadow-lg dark:shadow-2xl dark:shadow-sky-500/20">
-                    <div class="w-3 h-3 rounded-full shadow-sm bg-sky-600 dark:bg-sky-400"></div>
+                <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full font-medium mb-6 transition-all duration-300 shadow-lg"
+                     style="background: linear-gradient(135deg, {{ $category->color ?? '#0EA5E9' }}15, {{ $category->color ?? '#0EA5E9' }}25);
+                            border: 2px solid {{ $category->color ?? '#0EA5E9' }}40;
+                            color: {{ $category->color ?? '#0EA5E9' }};">
+                    <div class="w-3 h-3 rounded-full shadow-sm" style="background: {{ $category->color ?? '#0EA5E9' }};"></div>
                     {{ $category->name }}
                 </div>
                 <h1 class="text-4xl lg:text-5xl font-bold text-slate-800 dark:text-white mb-6 leading-tight">
@@ -64,7 +72,10 @@
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-12">
                 <div class="flex items-center gap-4">
                     <span class="text-slate-600 dark:text-slate-400">Urutkan:</span>
-                    <select class="border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent">
+                    <select class="border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200"
+                            style="--tw-ring-color: {{ $category->color ?? '#0EA5E9' }}40;"
+                            onfocus="this.style.borderColor='{{ $category->color ?? '#0EA5E9' }}'; this.style.boxShadow='0 0 0 3px {{ $category->color ?? '#0EA5E9' }}20';"
+                            onblur="this.style.borderColor=''; this.style.boxShadow='';">
                         <option>Terbaru</option>
                         <option>Terpopuler</option>
                         <option>A-Z</option>
@@ -109,7 +120,10 @@
                                 <div class="text-sm text-slate-500 dark:text-slate-400 mb-2">
                                     {{ $article->published_at ? $article->published_at->translatedFormat('d F Y') : $article->created_at->translatedFormat('d F Y') }}
                                 </div>
-                                <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3 leading-tight group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                                <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3 leading-tight group-hover:transition-colors duration-200"
+                                    style="transition: color 0.2s ease;"
+                                    onmouseover="this.style.color='{{ $category->color ?? '#0EA5E9' }}'"
+                                    onmouseout="this.style.color=''">
                                     <a href="{{ route('news.detail', $article->slug) }}">{{ $article->title }}</a>
                                 </h3>
                                 <p class="text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
@@ -117,7 +131,10 @@
                                 </p>
                                 <div class="flex items-center justify-between">
                                     <a href="{{ route('news.detail', $article->slug) }}" 
-                                       class="text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 font-semibold inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                                       class="font-semibold inline-flex items-center gap-2 group-hover:gap-3 transition-all duration-200"
+                                       style="color: {{ $category->color ?? '#0EA5E9' }};"
+                                       onmouseover="this.style.opacity='0.8'"
+                                       onmouseout="this.style.opacity='1'">
                                         Baca Selengkapnya 
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -153,7 +170,10 @@
                         Saat ini belum ada artikel dalam kategori "{{ $category->name }}". Silakan kembali lagi nanti atau jelajahi kategori lainnya.
                     </p>
                     <a href="{{ route('news') }}" 
-                       class="inline-flex items-center gap-2 px-6 py-3 bg-sky-600 dark:bg-sky-500 text-white rounded-lg hover:bg-sky-700 dark:hover:bg-sky-600 transition-colors">
+                       class="inline-flex items-center gap-2 px-6 py-3 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                       style="background: linear-gradient(135deg, {{ $category->color ?? '#0EA5E9' }}, {{ $category->color ?? '#0EA5E9' }}CC);"
+                       onmouseover="this.style.transform='translateY(-2px)'; this.style.filter='brightness(1.1)'"
+                       onmouseout="this.style.transform=''; this.style.filter=''">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
@@ -191,7 +211,9 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2 transition-colors duration-200"
+                                onmouseover="this.style.color='{{ $otherCategory->color ?? '#3B82F6' }}'"
+                                onmouseout="this.style.color=''">
                                 {{ $otherCategory->name }}
                             </h3>
                             <p class="text-slate-600 dark:text-slate-300 text-sm mb-2">
